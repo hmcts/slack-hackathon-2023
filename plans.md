@@ -26,3 +26,10 @@ Request leave form
 Start of leave requested date - no limitation on past or future
 End of leave requested date - no limitation on past or future, can not be before the start date
 Total number of work days
+
+MVP doesn’t include
+Year carry over
+Buy and sell days
+Option to add annual entitlement for multiple years
+Other types of leave
+Partial days off
