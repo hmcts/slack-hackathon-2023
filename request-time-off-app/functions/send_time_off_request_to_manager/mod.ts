@@ -37,26 +37,30 @@ export default SlackFunction(
         },
       ],
     }]);
+      await client.chat.postMessage({
+          channel: 'C067VNSHNF6',
+          text: `A new leave request from <@${inputs.employee}> for ${inputs.start_date} to ${inputs.end_date} was sent to <@${inputs.manager}> for approval.`,
+      });
+      // Send the message to the manager
+      const msgResponse = await client.chat.postMessage({
+          channel: inputs.manager,
+          blocks,
+          // Fallback text to use when rich media can't be displayed (i.e. notifications) as well as for screen readers
+          text: "A new time off request has been submitted",
+      });
 
-    // Send the message to the manager
-    const msgResponse = await client.chat.postMessage({
-      channel: inputs.manager,
-      blocks,
-      // Fallback text to use when rich media can't be displayed (i.e. notifications) as well as for screen readers
-      text: "A new time off request has been submitted",
-    });
+      if (!msgResponse.ok) {
+          console.log("Error during request chat.postMessage!", msgResponse.error);
+      }
 
-    if (!msgResponse.ok) {
-      console.log("Error during request chat.postMessage!", msgResponse.error);
-    }
-
-    // IMPORTANT! Set `completed` to false in order to keep the interactivity
-    // points (the approve/deny buttons) "alive"
-    // We will set the function's complete state in the button handlers below.
-    return {
-      completed: false,
-    };
-  },
+      // IMPORTANT! Set `completed` to false in order to keep the interactivity
+      // points (the approve/deny buttons) "alive"
+      // We will set the function's complete state in the button handlers below.
+      return {
+          completed: false,
+      };
+  }
+    ,
   // Create an 'actions handler', which is a function that will be invoked
   // when specific interactive Block Kit elements (like buttons!) are interacted
   // with.
@@ -120,6 +124,21 @@ export default SlackFunction(
     });
     if (!msgUpdate.ok) {
       console.log("Error during manager chat.update!", msgUpdate.error);
+    }
+
+    const inputs = body.function_data.inputs;
+
+    if (approved) {
+        await client.chat.postMessage({
+            channel: 'C067VNSHNF6',
+            text: `The leave request from <@${inputs.employee}> for ${inputs.start_date} to ${inputs.end_date} was approved by <@${inputs.manager}>.`,
+        });
+    }
+    if (!approved) {
+        await client.chat.postMessage({
+            channel: 'C067VNSHNF6',
+            text: `The leave request from <@${inputs.employee}> for ${inputs.start_date} to ${inputs.end_date} was denied by <@${inputs.manager}>.`,
+        });
     }
 
     // And now we can mark the function as 'completed' - which is required as
