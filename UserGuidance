@@ -1,0 +1,14 @@
+Directions for user
+The manager needs to create a channel in Slack. This channel should include all the members of their team.
+The manager then needs to add RoboPTO to the channel. To do this, they should blahdeblah (inc how to & screenshots etc)
+When they are first added to the channel with RoboPTO in, the employee should use the details (name tbc) function to add their annual leave reset date, and their annual entitlement. (inc how to & screenshots)
+When employee wants to request annual leave they use the Request time off form and complete all the fields (inc how to & screenshots)
+Approval request goes to their manager to approve or deny
+When the manager has approved the PTO, the employee will be notified, and can carry out their time off
+
+Things to keep in mind
+It is the employees responsibility to enter the correct number of days leave they are entitled to
+You can book leave in the past, and the future
+You can not book more days than you are entitled to
+This is only for annual leave and privilege days. This is not for other types of leave
+For this MVP it is not possible to carry days over to the following year. To do this you lower your number of days for the previous year, and increase for the following year
