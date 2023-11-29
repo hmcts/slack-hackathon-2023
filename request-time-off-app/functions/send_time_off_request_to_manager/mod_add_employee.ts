@@ -1,4 +1,4 @@
-import { SendTimeOffRequestToManagerFunction } from "./definition.ts";
+import { AddEmployeeDetailsFunction } from "./definition.ts";
 import { SlackFunction } from "deno-slack-sdk/mod.ts";
 import { APPROVE_ID, DENY_ID } from "./constants.ts";
 import timeOffRequestHeaderBlocks from "./blocks.ts";
@@ -7,7 +7,7 @@ import timeOffRequestHeaderBlocks from "./blocks.ts";
 // for approval for the time off request. The message includes some Block Kit with two
 // interactive buttons: one to approve, and one to deny.
 export default SlackFunction(
-  SendTimeOffRequestToManagerFunction,
+  AddEmployeeDetailsFunction,
   async ({ inputs, client }) => {
     console.log("Forwarding the following time off request:", inputs);
 
@@ -40,7 +40,7 @@ export default SlackFunction(
     await client.chat.postMessage({
       channel: "C067VNSHNF6",
       text:
-        `A new leave request from <@${inputs.employee}> for ${inputs.start_date} to ${inputs.end_date} was sent to <@${inputs.manager}> for approval.`,
+        `A new leave request from <@${inputs.employee}> for ${inputs.leave_cycle_start_date} to ${inputs.leave_cycle_end_date} was sent to <@${inputs.manager}> for approval.`,
     });
     // Send the message to the manager
     const msgResponse = await client.chat.postMessage({
@@ -82,10 +82,10 @@ export default SlackFunction(
           {
             type: "mrkdwn",
             text:
-              `Your time off request from ${body.function_data.inputs.start_date} to ${body.function_data.inputs.end_date}` +
+              `Your time off request from ${body.function_data.inputs.leave_cycle_start_date} to ${body.function_data.inputs.leave_cycle_end_date}` +
               `${
-                body.function_data.inputs.reason
-                  ? ` for ${body.function_data.inputs.reason}`
+                body.function_data.inputs.leave_entitlement_days
+                  ? ` for ${body.function_data.inputs.leave_entitlement_days}`
                   : ""
               } was ${
                 approved ? " :white_check_mark: Approved" : ":x: Denied"
@@ -132,14 +132,14 @@ export default SlackFunction(
       await client.chat.postMessage({
         channel: "C067VNSHNF6",
         text:
-          `The leave request from <@${inputs.employee}> for ${inputs.start_date} to ${inputs.end_date} was approved by <@${inputs.manager}>.`,
+          `The leave request from <@${inputs.employee}> for ${inputs.leave_cycle_start_date} to ${inputs.leave_cycle_end_date} was approved by <@${inputs.manager}>.`,
       });
     }
     if (!approved) {
       await client.chat.postMessage({
         channel: "C067VNSHNF6",
         text:
-          `The leave request from <@${inputs.employee}> for ${inputs.start_date} to ${inputs.end_date} was denied by <@${inputs.manager}>.`,
+          `The leave request from <@${inputs.employee}> for ${inputs.leave_cycle_start_date} to ${inputs.leave_cycle_end_date} was denied by <@${inputs.manager}>.`,
       });
     }
 

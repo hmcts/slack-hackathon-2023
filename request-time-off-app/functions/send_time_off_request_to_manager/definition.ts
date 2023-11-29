@@ -48,3 +48,50 @@ export const SendTimeOffRequestToManagerFunction = DefineFunction({
     required: [],
   },
 });
+
+export const AddEmployeeDetailsFunction = DefineFunction({
+  callback_id: "add_employee_details",
+  title: "Add Employee Details",
+  description:
+    "add an your leave days entitlement, manager and leave year details",
+  source_file: "functions/send_time_off_request_to_manager/mod.ts",
+  input_parameters: {
+    properties: {
+      interactivity: {
+        type: Schema.slack.types.interactivity,
+      },
+      employee: {
+        type: Schema.slack.types.user_id,
+        description: "The user requesting the time off",
+      },
+      manager: {
+        type: Schema.slack.types.user_id,
+        description: "The manager approving the time off request",
+      },
+      leave_cycle_start_date: {
+        type: Schema.slack.types.date,
+        description: "Time off start date",
+      },
+      leave_cycle_end_date: {
+        type: Schema.slack.types.date,
+        description: "Time off end date",
+      },
+      leave_entitlement_days: {
+        type: Schema.types.string,
+        description: "The reason for the time off request",
+      },
+    },
+    required: [
+      "employee",
+      "manager",
+      "leave_cycle_start_date",
+      "leave_cycle_end_date",
+      "leave_entitlement_days",
+      "interactivity",
+    ],
+  },
+  output_parameters: {
+    properties: {},
+    required: [],
+  },
+});
